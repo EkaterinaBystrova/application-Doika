@@ -1,0 +1,87 @@
+#:kivy 2.1.0
+WindowManager:
+    Calendar:
+    Cows:
+    MilkYield:
+
+<Calendar>:
+    name: "calendar"
+    BoxLayout:
+        orientation: "vertical"
+        MDLabel:
+            text: "События дня"
+        MDLabel:
+            id: text_input
+            text: ""
+        MDRaisedButton:
+            id: datapiker
+            text: "Ввести дату"
+            on_release: app.show_date_picker()
+        
+        Button:
+            text: 'к коровам'
+            on_release: app.root.current = 'cows'
+        Button:
+            text: 'к удоям'
+            on_release: app.root.current = "milkyield"
+
+<Cows>:
+    name:"cows"
+    BoxLayout:
+        orientation: "vertical"
+        MDLabel:
+            text: "Список коров"
+        Button:
+            text: 'к событиям'
+            on_release: app.root.current = 'calendar'
+        Button:
+            text: 'к удоям'
+            on_release: app.root.current = "milkyield"
+
+<MilkYield>:
+    name: "milkyield"
+    BoxLayout:
+        orientation: "vertical"
+        MDLabel:
+            text: "Удои молока"
+        Button:
+            text: 'к событиям'
+            on_release: app.root.current = 'calendar'
+        Button:
+            text: 'к коровам'
+            on_release: app.root.current = 'cows'
+#<MainWidget>:
+#    orientation: 'vertical'
+#    padding: 20
+#    spacing: 20
+ #   Label:
+#        text: 'Привет'
+
+ #   Label:
+  #      text: 'Мир'
+#    name_input: name
+#    hello_label: hello
+
+#    Image:
+ #       source: 'hello.png'
+#
+ #   TextInput:
+  #      id: name
+   #     multiline: False
+    #    size_hint: (.5, None)
+     #   pos_hint:{"center_x":0.5, "top":1}
+      #  height: 50
+       # font_size: 30
+
+    #Label:
+     #   id: hello
+      #  font_size: 30
+       # text: 'Напишите как вас зовут'
+
+#    Button:
+ #       font_size: 30
+  #      text: 'Поздороваться'
+   #     size_hint: (.5, None)
+    #    pos_hint:{"center_x":0.5, "top":1}
+
+#        on_press: root.say_hello()
