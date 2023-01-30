@@ -1,87 +1,735 @@
 #:kivy 2.1.0
 WindowManager:
-    Calendar:
-    Cows:
-    MilkYield:
+    Calendar: 
+    NewEvent: 
+    Cows:  
+    NewCows:#для введения новых коров
+    Page_of_cow:#страница с введенными данными коровы
+    EditCows: #для редактирования характеристик существующей коровы
+    MilkYield_main: 
+    MilkYield_by_cows: 
 
 <Calendar>:
     name: "calendar"
+    FitImage:
+        id: title_image  # id для обращения к данному виджету
+        size_hint_y: 1  # высота изображения (45% от высоты экрана)
+        # Идентификатор root всегда ссылается на базовый класс.
+        # В нашем случае это <class 'uix.screens.baseclass.callscreen.CallScreen'>,
+        # а self - объект самого виджета - <kivymd.utils.fitimage.FitImage object>.
+        y: root.height - self.height  # положение по оси Y
+        source: 'cow.png'  # путь к изображению
+    
+    BoxLayout:
+    #основное окно
+        orientation: "vertical"
+        BoxLayout: 
+            orientation:  "horizontal"
+            size_hint: 1, 0.1
+            
+            MDLabel:
+                id: eventtime
+                md_bg_color: 0, 0, 0, 0.5
+                text: "События периода"
+                color: 1,1,1,1
+                font_style: "H6"
+                font_name: "Comic"
+            MDLabel:
+                id: dateintext1
+                md_bg_color: 0, 0, 0, 0.5
+                text: ""
+                color: 1,1,1,1
+                font_name: "Comic"
+            MDRaisedButton:
+                id: datapiker1
+                md_bg_color: 0.5, 0.5, 0.5, 0.7
+                text: "Ввести дату"
+                color: 1,1,1,1
+                font_name: "Comic"
+                on_release: app.show_date_picker_for_calendar()
+        BoxLayout:
+            id: table
+            size_hint: 0.9, 0.9
+            pos_hint: {'center_x':.5}
+
+        MDRaisedButton:
+            md_bg_color: 0.3, 0.3, 0.3, 0.7
+            text: "Добавить событие"
+            color: 1,1,1,1
+            font_name: "Comic"
+            on_release: app.root.current = 'newevent'
+        BoxLayout:
+            orientation: "horizontal"
+            size_hint: 1, 0.2
+            Button:
+                text: 'к событиям'
+                font_name: "Comic"
+                background_normal: ''
+                background_color: (0.0, 0.0, 0.0)
+                on_release: app.root.current = 'calendar'
+            Button:
+                text: 'к коровам'
+                font_name: "Comic"
+                background_normal: ''
+                background_color: (0.0, 0.0, 0.0)
+                on_release: app.root.current = 'cows'
+            Button:
+                text: 'к удоям'
+                font_name: "Comic"
+                background_normal: ''
+                background_color: (0.0, 0.0, 0.0)
+                on_release: app.root.current = "milkyield"
+<NewEvent>:
+    name:"newevent"
+    FitImage:
+        id: title_image  # id для обращения к данному виджету
+        size_hint_y: 1  # высота изображения (45% от высоты экрана)
+        # Идентификатор root всегда ссылается на базовый класс.
+        # В нашем случае это <class 'uix.screens.baseclass.callscreen.CallScreen'>,
+        # а self - объект самого виджета - <kivymd.utils.fitimage.FitImage object>.
+        y: root.height - self.height  # положение по оси Y
+        source: 'cow.png'  # путь к изображению
+    
     BoxLayout:
         orientation: "vertical"
         MDLabel:
-            text: "События дня"
-        MDLabel:
-            id: text_input
-            text: ""
+            md_bg_color: 0, 0, 0, 0.5
+            text: "Создание нового события"
+            color: 1,1,1,1
+            font_style: "H6"
+            font_name: "Comic"
+            
+
+        BoxLayout:
+            orientation: "horizontal"
+            MDRaisedButton:
+                id: datapiker2
+                md_bg_color: 0.3, 0.3, 0.3, 0.7
+                pos_hint: {'center_y':0.7}
+                text: "Ввести дату"
+                color: 1,1,1,1
+                font_name: "Comic"
+                on_release: app.show_date_picker_for_newevent()
+            MDLabel:
+                id: dateintext2
+                md_bg_color: 0, 0, 0, 0.5
+                pos_hint: {'center_y':0.7}
+                text: ""
+                color: 1,1,1,1
+                size_hint: 0.2, 0.2
+        BoxLayout:
+            orientation: "horizontal"
+            MDRaisedButton:
+                id: cownames_DropdownMenu
+                md_bg_color: 0.3, 0.3, 0.3, 0.7
+                pos_hint: {'center_y':0.7}
+                text: "Выбрать кличку"
+                color: 1,1,1,1
+                font_name: "Comic"
+                on_release: app.dropdown()
+            MDLabel:
+                id: choosingname
+                md_bg_color: 0, 0, 0, 0.5
+                pos_hint: {'center_y':0.7}
+                text: ""
+                color: 1,1,1,1
+                size_hint: 0.2, 0.2
+        BoxLayout:
+            orientation: "horizontal"    
+            MDLabel:
+                md_bg_color: 0, 0, 0, 0.5
+                text: "Описание события"
+                pos_hint: {'center_y':0.7}
+                color: 1,1,1,1
+                font_name: "Comic"
+                size_hint: 0.5, 0.5
+            MDTextField:
+                id: description
+                hint_text: "Впишите описание события"
+                pos_hint: {'center_y':0.7}
+                mode: 'fill'
+                fill_color: 0, 0, 0, 0.2
+                size_hint: 0.7, 0.5
+                
+                
+
         MDRaisedButton:
-            id: datapiker
-            text: "Ввести дату"
-            on_release: app.show_date_picker()
-        
-        Button:
-            text: 'к коровам'
-            on_release: app.root.current = 'cows'
-        Button:
-            text: 'к удоям'
-            on_release: app.root.current = "milkyield"
+            md_bg_color: 0.3, 0.3, 0.3, 0.7
+            text: "Отмена"
+            color: 1,1,1,1
+            font_name: "Comic"
+            on_release: app.root.current ="calendar"
+        MDRaisedButton:
+            id: saveevent
+            md_bg_color: 0.3, 0.3, 0.3, 0.7
+            text: "Сохранить"
+            color: 1,1,1,1
+            font_name: "Comic"
+            on_release: app.save_event_def()
 
 <Cows>:
     name:"cows"
+    FitImage:
+        id: title_image  # id для обращения к данному виджету
+        size_hint_y: 1  # высота изображения (45% от высоты экрана)
+        # Идентификатор root всегда ссылается на базовый класс.
+        # В нашем случае это <class 'uix.screens.baseclass.callscreen.CallScreen'>,
+        # а self - объект самого виджета - <kivymd.utils.fitimage.FitImage object>.
+        y: root.height - self.height  # положение по оси Y
+        source: 'cow.png'  # путь к изображению
+    
+    BoxLayout:
+        orientation: "vertical"
+        BoxLayout:
+            id: table
+            size_hint: 0.9, 0.9
+            pos_hint: {'center_x':.5}
+        MDRaisedButton:
+            md_bg_color: 0.3, 0.3, 0.3, 0.7
+            text: "Добавить новую корову"
+            color: 1,1,1,1
+            font_name: "Comic"
+            on_release: app.root.current = 'newcows'
+        BoxLayout:
+            orientation: "horizontal"
+            size_hint: 1, 0.2
+            Button:
+                text: 'к событиям'
+                font_name: "Comic"
+                background_normal: ''
+                background_color: (0.0, 0.0, 0.0)
+                on_release: app.root.current = 'calendar'
+            Button:
+                text: 'к коровам'
+                font_name: "Comic"
+                background_normal: ''
+                background_color: (0.0, 0.0, 0.0)
+                on_release: app.root.current = 'cows'
+            Button:
+                text: 'к удоям'
+                font_name: "Comic"
+                background_normal: ''
+                background_color: (0.0, 0.0, 0.0)
+                on_release: app.root.current = "milkyield"
+    
+ 
+<NewCows>:
+#тут будут создаваться новые коровы и записываться они должны в <cows>:
+    name:"newcows"
+    FitImage:
+        id: title_image  # id для обращения к данному виджету
+        size_hint_y: 1  # высота изображения (45% от высоты экрана)
+        # Идентификатор root всегда ссылается на базовый класс.
+        # В нашем случае это <class 'uix.screens.baseclass.callscreen.CallScreen'>,
+        # а self - объект самого виджета - <kivymd.utils.fitimage.FitImage object>.
+        y: root.height - self.height  # положение по оси Y
+        source: 'cow.png'  # путь к изображению
+    
     BoxLayout:
         orientation: "vertical"
         MDLabel:
-            text: "Список коров"
-        Button:
-            text: 'к событиям'
-            on_release: app.root.current = 'calendar'
-        Button:
-            text: 'к удоям'
-            on_release: app.root.current = "milkyield"
-
-<MilkYield>:
-    name: "milkyield"
-    BoxLayout:
-        orientation: "vertical"
-        MDLabel:
-            text: "Удои молока"
-        Button:
-            text: 'к событиям'
-            on_release: app.root.current = 'calendar'
-        Button:
-            text: 'к коровам'
+            md_bg_color: 0, 0, 0, 0.5
+            text: "Добавление новой коровы"
+            color: 1,1,1,1
+            font_style: "H6"
+            font_name: "Comic"
+        BoxLayout:
+            orientation: "horizontal" 
+            
+            MDLabel:
+                text: "Имя коровы:"
+                color: 1,1,1,1
+                font_name: "Comic"
+            MDTextField:
+                id: cowname
+                hint_text: "Ввести имя коровы"
+                mode: 'fill'
+                fill_color: 0, 0, 0, 0.2
+                size_hint: 1, 0.9
+        BoxLayout:
+            orientation: "horizontal" 
+            MDLabel:
+                text: "Статус:"
+                color: 1,1,1,1
+                font_name: "Comic"
+            MDTextField:
+                id: status
+                hint_text: "Ввести статус коровы"
+                mode: 'fill'
+                fill_color: 0, 0, 0, 0.2
+                size_hint: 1, 0.9
+        BoxLayout:
+            orientation: "horizontal" 
+            MDRaisedButton:
+                id: date_of_birth 
+                md_bg_color: 0.3, 0.3, 0.3, 0.7
+                text: "Ввести дату рождения"
+                color: 1,1,1,1
+                font_name: "Comic"
+                on_release: app.show_date_picker_for_newcow1()
+            MDLabel:
+                id:dateintext3
+                md_bg_color: 0, 0, 0, 0.5
+                text: ""
+                color: 1,1,1,1
+                size_hint: 1, 0.5
+        BoxLayout:
+            orientation: "horizontal" 
+            MDRaisedButton:
+                id: date_of_last_calving date
+                md_bg_color: 0.3, 0.3, 0.3, 0.7
+                text: "Ввести дату последнего отёла"
+                color: 1,1,1,1
+                font_name: "Comic"
+                size_hint: 0.1, 0.5
+                on_release: app.show_date_picker_for_newcow2()
+            MDLabel:
+                id:dateintext4
+                md_bg_color: 0, 0, 0, 0.5
+                text: ""
+                color: 1,1,1,1
+                size_hint: 1, 0.5
+        BoxLayout:
+            orientation: "horizontal" 
+            MDRaisedButton:
+                id: date_of_last_calving date
+                md_bg_color: 0.3, 0.3, 0.3, 0.7
+                size_hint: 0.1, 0.5
+                text: "Ввести дату осеменения коровы"
+                color: 1,1,1,1
+                font_name: "Comic"
+                on_release: app.show_date_picker_for_newcow3()
+            MDLabel:
+                id: dateintext5
+                md_bg_color: 0, 0, 0, 0.5
+                text: ""
+                color: 1,1,1,1
+                size_hint: 1, 0.5
+        BoxLayout:
+            orientation: "horizontal"
+            MDLabel:
+                md_bg_color: 0, 0, 0, 0.5
+                text: "Дата отела,рассчитанная по дате осеменения"
+                font_name: "Comic"
+                color: 1,1,1,1
+                size_hint: 0.4, 0.8
+            MDLabel:
+                id: dateintext6
+                md_bg_color: 0, 0, 0, 0.5
+                text: ""
+                color: 1,1,1,1
+                size_hint: 0.4, 0.8
+        MDRaisedButton:
+            id: saveevent
+            md_bg_color: 0.3, 0.3, 0.3, 0.7
+            text: "Сохранить"
+            color: 1,1,1,1
+            font_name: "Comic"
+            on_release: app.save_cow_def()
+        MDRaisedButton:
+            md_bg_color: 0.3, 0.3, 0.3, 0.7
+            text: "Назад" #страница предыдущих событий
+            color: 1,1,1,1
+            font_name: "Comic"
             on_release: app.root.current = 'cows'
-#<MainWidget>:
-#    orientation: 'vertical'
-#    padding: 20
-#    spacing: 20
- #   Label:
-#        text: 'Привет'
+        BoxLayout:
+            orientation: "horizontal"
+            size_hint: 1, 0.2
+            Button:
+                text: 'к событиям'
+                font_name: "Comic"
+                background_normal: ''
+                background_color: (0.0, 0.0, 0.0)
+                on_release: app.root.current = 'calendar'
+            Button:
+                text: 'к коровам'
+                font_name: "Comic"
+                background_normal: ''
+                background_color: (0.0, 0.0, 0.0)
+                on_release: app.root.current = 'cows'
+            Button:
+                text: 'к удоям'
+                font_name: "Comic"
+                background_normal: ''
+                background_color: (0.0, 0.0, 0.0)
+                on_release: app.root.current = "milkyield"
+             
+<Page_of_cow>:
+#личный кабинет коровы,тут должны отображаться удои коровы, все ее события и предполагаемый отел
+    name: "pageofcow"
+    FitImage:
+        id: title_image  # id для обращения к данному виджету
+        size_hint_y: 1  # высота изображения (45% от высоты экрана)
+        # Идентификатор root всегда ссылается на базовый класс.
+        # В нашем случае это <class 'uix.screens.baseclass.callscreen.CallScreen'>,
+        # а self - объект самого виджета - <kivymd.utils.fitimage.FitImage object>.
+        y: root.height - self.height  # положение по оси Y
+        source: 'cow.png'  # путь к изображению
+    
+    BoxLayout:
+        orientation: "vertical"
+        MDLabel:
+            id: currentcow
+            md_bg_color: 0, 0, 0, 0.5
+            size_hint: 1, 0.2
+            text: ""
+            color: 1,1,1,1
+            font_style: "H6"
+            font_name: "Comic"
+        BoxLayout:
+            id: table3
+            size_hint: 0.9, 0.9
+            pos_hint: {'center_x':.5}
+        MDRaisedButton:
+            md_bg_color: 0.3, 0.3, 0.3, 0.7
+            text: "Изменить характеристики"
+            color: 1,1,1,1
+            font_name: "Comic"
+            on_release: app.editingcow() 
+        BoxLayout:
+            orientation: "horizontal"
+            size_hint: 1, 0.2
+            Button:
+                text: 'к событиям'
+                font_name: "Comic"
+                background_normal: ''
+                background_color: (0.0, 0.0, 0.0)
+                on_release: app.root.current = 'calendar'
+            Button:
+                text: 'к коровам'
+                font_name: "Comic"
+                background_normal: ''
+                background_color: (0.0, 0.0, 0.0)
+                on_release: app.root.current = 'cows'
+            Button:
+                text: 'к удоям'
+                font_name: "Comic"
+                background_normal: ''
+                background_color: (0.0, 0.0, 0.0)
+                on_release: app.root.current = "milkyield"
+<EditCows>:
+#тут будут создаваться новые коровы и записываться они должны в <cows>:
+    name:"editcows"
+    FitImage:
+        id: title_image  # id для обращения к данному виджету
+        size_hint_y: 1  # высота изображения (45% от высоты экрана)
+        # Идентификатор root всегда ссылается на базовый класс.
+        # В нашем случае это <class 'uix.screens.baseclass.callscreen.CallScreen'>,
+        # а self - объект самого виджета - <kivymd.utils.fitimage.FitImage object>.
+        y: root.height - self.height  # положение по оси Y
+        source: 'cow.png'  # путь к изображению
+    
+    BoxLayout:
+        orientation: "vertical"
+        MDLabel:
+            md_bg_color: 0, 0, 0, 0.5
+            text: "Изменение характеристик коровы"
+            color: 1,1,1,1
+            font_style: "H6"
+            font_name: "Comic"
+        BoxLayout:
+            orientation: "horizontal" 
+            MDLabel:
+                text: "Имя коровы:"
+                color: 1,1,1,1
+                font_name: "Comic"
+            MDTextField:
+                id: cowname2
+                hint_text: "Ввести имя коровы"
+                mode: 'fill'
+                fill_color: 0, 0, 0, 0.2
+                size_hint: 1, 0.9
+        BoxLayout:
+            orientation: "horizontal" 
+            MDLabel:
+                text: "Статус:"
+                color: 1,1,1,1
+                font_name: "Comic"
+            MDTextField:
+                id: status2
+                hint_text: "Ввести статус коровы"
+                mode: 'fill'
+                fill_color: 0, 0, 0, 0.2
+                size_hint: 1, 0.9
+        BoxLayout:
+            orientation: "horizontal" 
+            MDRaisedButton:
+                id: date_of_birth2
+                md_bg_color: 0.3, 0.3, 0.3, 0.7
+                size_hint: 0.1, 0.5
+                text: "Ввести дату рождения"
+                color: 1,1,1,1
+                font_name: "Comic"
+                on_release: app.show_date_picker_for_newcow1()
+            MDLabel:
+                id:dateintext32
+                md_bg_color: 0, 0, 0, 0.5
+                text: ""
+                color: 1,1,1,1
+                size_hint: 1, 0.5
+                
+        BoxLayout:
+            orientation: "horizontal" 
+            MDRaisedButton:
+                id: date_of_last_calving date2
+                md_bg_color: 0.3, 0.3, 0.3, 0.7
+                size_hint: 0.1, 0.5
+                text: "Ввести дату последнего отёла"
+                color: 1,1,1,1
+                font_name: "Comic"
+                on_release: app.show_date_picker_for_newcow2()
+            MDLabel:
+                id:dateintext42
+                md_bg_color: 0, 0, 0, 0.5
+                text: ""
+                color: 1,1,1,1
+                size_hint: 1, 0.5
+        BoxLayout:
+            orientation: "horizontal" 
+            MDRaisedButton:
+                id: date_of_last_calving date2
+                md_bg_color: 0.3, 0.3, 0.3, 0.7
+                size_hint: 0.1, 0.5
+                text: "Ввести дату осеменения коровы"
+                color: 1,1,1,1
+                font_name: "Comic"
+                on_release: app.show_date_picker_for_newcow3()
+            MDLabel:
+                id: dateintext52
+                md_bg_color: 0, 0, 0, 0.5
+                text: ""
+                color: 1,1,1,1
+                size_hint: 1, 0.5
+        BoxLayout:
+            orientation: "horizontal"
+            MDLabel:
+                md_bg_color: 0, 0, 0, 0.5
+                text: "Дата отела,рассчитанная по дате осеменения"
+                color: 1,1,1,1
+                font_name: "Comic"
+                size_hint: 0.4, 0.8
+            MDLabel:
+                id: dateintext62
+                md_bg_color: 0, 0, 0, 0.5
+                text: ""
+                color: 1,1,1,1
+                size_hint: 0.4, 0.8
+        MDRaisedButton:
+            id: saveevent
+            md_bg_color: 0.3, 0.3, 0.3, 0.7
+            text: "Сохранить"
+            color: 1,1,1,1
+            font_name: "Comic"
+            on_release: app.save_cow_def_afterediting()
+        MDRaisedButton:
+            md_bg_color: 0.3, 0.3, 0.3, 0.7
+            text: "Назад" #страница предыдущих событий
+            color: 1,1,1,1
+            font_name: "Comic"
+            on_release: app.root.current = 'pageofcow'
+        BoxLayout:
+            orientation: "horizontal"
+            size_hint: 1, 0.2
+            Button:
+                text: 'к событиям'
+                font_name: "Comic"
+                background_normal: ''
+                background_color: (0.0, 0.0, 0.0)
+                on_release: app.root.current = 'calendar'
+            Button:
+                text: 'к коровам'
+                font_name: "Comic"
+                background_normal: ''
+                background_color: (0.0, 0.0, 0.0)
+                on_release: app.root.current = 'cows'
+            Button:
+                text: 'к удоям'
+                font_name: "Comic"
+                background_normal: ''
+                background_color: (0.0, 0.0, 0.0)
+                on_release: app.root.current = "milkyield"                
 
- #   Label:
-  #      text: 'Мир'
-#    name_input: name
-#    hello_label: hello
-
-#    Image:
- #       source: 'hello.png'
-#
- #   TextInput:
-  #      id: name
-   #     multiline: False
-    #    size_hint: (.5, None)
-     #   pos_hint:{"center_x":0.5, "top":1}
-      #  height: 50
-       # font_size: 30
-
-    #Label:
-     #   id: hello
-      #  font_size: 30
-       # text: 'Напишите как вас зовут'
-
-#    Button:
- #       font_size: 30
-  #      text: 'Поздороваться'
-   #     size_hint: (.5, None)
-    #    pos_hint:{"center_x":0.5, "top":1}
-
-#        on_press: root.say_hello()
+<MilkYield_main>:
+    name: "milkyield"
+    FitImage:
+        id: title_image  # id для обращения к данному виджету
+        size_hint_y: 1  # высота изображения (45% от высоты экрана)
+        # Идентификатор root всегда ссылается на базовый класс.
+        # В нашем случае это <class 'uix.screens.baseclass.callscreen.CallScreen'>,
+        # а self - объект самого виджета - <kivymd.utils.fitimage.FitImage object>.
+        y: root.height - self.height  # положение по оси Y
+        source: 'cow.png'  # путь к изображению
+    
+    BoxLayout:
+        orientation: "vertical"
+        #выбор даты
+        BoxLayout:
+            orientation:  "horizontal"
+            size_hint: 1, 0.4
+            MDLabel:
+                md_bg_color: 0, 0, 0, 0.5
+                text: "Удои молока по дате"
+                color: 1,1,1,1
+                font_style: "H6"
+                font_name: "Comic"
+            MDLabel:
+                md_bg_color: 0, 0, 0, 0.5
+                id:dateintext7
+                text: ""
+                color: 1,1,1,1
+                font_name: "Comic"
+            MDRaisedButton:
+                id: datapiker1
+                md_bg_color: 0.3, 0.3, 0.3, 0.7
+                text: "Ввести дату"
+                color: 1,1,1,1
+                font_name: "Comic"
+                on_release: app.show_date_picker_for_milk()
+        #время суток и сумма
+        BoxLayout:
+            orientation:  "horizontal"
+            MDRaisedButton:
+                md_bg_color: 0.3, 0.3, 0.3, 0.7
+                pos_hint: {'center_y':0.7}
+                text: "Утро"
+                color: 1,1,1,1
+                font_name: "Comic"
+                on_release: app.open_milkyield_by_cows("утро")
+            MDLabel:
+                id: morning_milk
+                md_bg_color: 0, 0, 0, 0.5
+                pos_hint: {'center_y':0.7}
+                text: ""
+                color: 1,1,1,1
+                size_hint: 0.2, 0.2
+        BoxLayout:
+            orientation:  "horizontal"
+            MDRaisedButton:
+                md_bg_color: 0.3, 0.3, 0.3, 0.7
+                pos_hint: {'center_y':0.7}
+                text: "День"
+                color: 1,1,1,1
+                font_name: "Comic"
+                on_release: app.open_milkyield_by_cows("день")
+            MDLabel:
+                id: afternoon_milk
+                md_bg_color: 0, 0, 0, 0.5
+                pos_hint: {'center_y':0.7}
+                text: ""
+                color: 1,1,1,1
+                size_hint: 0.2, 0.2
+        BoxLayout:
+            orientation:  "horizontal"
+            MDRaisedButton:
+                md_bg_color: 0.3, 0.3, 0.3, 0.7
+                pos_hint: {'center_y':0.7}
+                text: "Вечер"
+                color: 1,1,1,1
+                font_name: "Comic"
+                on_release: app.open_milkyield_by_cows("вечер")
+            MDLabel:
+                id: evening_milk
+                md_bg_color: 0, 0, 0, 0.5
+                pos_hint: {'center_y':0.7}
+                text: ""
+                color: 1,1,1,1
+                size_hint: 0.2, 0.2
+        MDRaisedButton:
+            md_bg_color: 0.3, 0.3, 0.3, 0.7
+            pos_hint: {'center_y':0.7}
+            text: "Выгрузить файл со всеми удоями"
+            color: 1,1,1,1
+            font_name: "Comic"
+            on_release: app.download_yield()
+        BoxLayout:
+            orientation: "horizontal"
+            size_hint: 1, 0.2
+            pos_hint: {'center_y':0.7}
+            Button:
+                text: 'к событиям'
+                font_name: "Comic"
+                background_normal: ''
+                background_color: (0.0, 0.0, 0.0)
+                on_release: app.root.current = 'calendar'
+            Button:
+                text: 'к коровам'
+                font_name: "Comic"
+                background_normal: ''
+                background_color: (0.0, 0.0, 0.0)
+                on_release: app.root.current = 'cows'
+            Button:
+                text: 'к удоям'
+                font_name: "Comic"
+                background_normal: ''
+                background_color: (0.0, 0.0, 0.0)
+                on_release: app.root.current = "milkyield"
+<MilkYield_by_cows>:
+    name: "milkyield_by_cows"
+    FitImage:
+        id: title_image  # id для обращения к данному виджету
+        size_hint_y: 1  # высота изображения (45% от высоты экрана)
+        # Идентификатор root всегда ссылается на базовый класс.
+        # В нашем случае это <class 'uix.screens.baseclass.callscreen.CallScreen'>,
+        # а self - объект самого виджета - <kivymd.utils.fitimage.FitImage object>.
+        y: root.height - self.height  # положение по оси Y
+        source: 'cow.png'  # путь к изображению
+    
+    BoxLayout:
+        orientation: "vertical"
+        BoxLayout:
+            orientation: "horizontal"
+            size_hint: 1, 0.4
+            MDLabel:
+                id: date_of_milking
+                md_bg_color: 0, 0, 0, 0.5
+                text: ""
+                color: 1,1,1,1
+                font_style: "H6"
+                font_name: "Comic"
+            MDLabel:
+                id: period_of_day
+                md_bg_color: 0, 0, 0, 0.5
+                text: ""
+                color: 1,1,1,1
+                font_style: "H6"
+                font_name: "Comic"
+        BoxLayout:
+            id: cows_and_milk
+            orientation: "vertical"
+            size_hint: 0.9, 0.9
+            pos_hint: {'center_x':.5}
+            canvas.before:
+                Color:
+                    rgba: (1,1,1,1)
+                Rectangle:
+                    pos: cows_and_milk.pos
+                    size: (cows_and_milk.width, cows_and_milk.height)
+        MDRaisedButton:
+            size_hint: 0.4, 0.1
+            md_bg_color: 0.3, 0.3, 0.3, 0.7
+            text: 'Cохранить'
+            color: 1,1,1,1
+            font_name: "Comic"
+            on_release: app.save_yield()
+        BoxLayout:
+            orientation: "horizontal"
+            size_hint: 1, 0.2
+            Button:
+                text: 'к событиям'
+                font_name: "Comic"
+                background_normal: ''
+                background_color: (0.0, 0.0, 0.0)
+                on_release: app.root.current = 'calendar'
+            Button:
+                text: 'к коровам'
+                font_name: "Comic"
+                background_normal: ''
+                background_color: (0.0, 0.0, 0.0)
+                on_release: app.root.current = 'cows'
+            Button:
+                text: 'к удоям'
+                font_name: "Comic"
+                background_normal: ''
+                background_color: (0.0, 0.0, 0.0)
+                on_release: app.root.current = "milkyield"
+            
